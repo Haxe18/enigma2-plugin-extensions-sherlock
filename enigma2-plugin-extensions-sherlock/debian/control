@@ -1,0 +1,12 @@
+Package: enigma2-plugin-extensions-sherlock
+Version: 7.50
+Description: Sherlock
+Section: extra
+Priority: optional
+Maintainer: Haxe18
+Architecture: all
+OE: enigma2
+PackageArch: all
+Homepage: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock
+Depends: enigma2, enigma2-plugin-extensions-bitrateviewer
+Source: Vali,dhwz

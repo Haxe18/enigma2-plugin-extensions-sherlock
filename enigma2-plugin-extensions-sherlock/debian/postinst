@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "********************************************************"
+echo "*  Sherlock installed                                  *"
+echo "*  Coded by Vali (c)2009-2011                          *"
+echo "*  OE2.0 support by dhwz (c)2012                       *"
+echo "*  OE2.5 support by Haxe18 (c)2018                     *"
+echo "*                                                      *"
+echo "*  Restart Enigma-2 GUI to activate the plugin         *"
+echo "********************************************************"
+exit 0
