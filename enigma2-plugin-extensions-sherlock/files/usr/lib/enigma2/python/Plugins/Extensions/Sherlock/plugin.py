@@ -374,7 +374,6 @@ class SherlockII(Screen):
 			"displayHelp": self.ExitSherlock
 		}, -1)
 		self.SysUpdateTimer = eTimer()
-		self.SysUpdateTimer.callback.append(self.updateSysInfo)
 		self.onLayoutFinish.append(self.DataReader)
 
 	def ExitSherlock(self):
