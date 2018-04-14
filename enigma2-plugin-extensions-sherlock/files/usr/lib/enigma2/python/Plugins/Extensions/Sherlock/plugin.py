@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+,# -*- coding: utf-8 -*-
 #
 #    Sherlock for Dreambox-Enigma2
 #    Version: 7.0
@@ -534,7 +534,7 @@ class SherlockII(Screen):
 
 	def TempMessung(self):
 		maxtemp = 0
-		sensotN = "?"
+		sensotN = "No suitable sensor available ?"
 		try:
 			templist = sensors.getSensorsList(sensors.TYPE_TEMPERATURE)
 			tempcount = len(templist)
@@ -548,7 +548,7 @@ class SherlockII(Screen):
 						sensotN = "sensor-"+str(id)
 		except:
 			pass
-		return str(maxtemp) + "°C / " + sensotN
+		return str(maxtemp) + "Â°C / " + sensotN
 
 
 
