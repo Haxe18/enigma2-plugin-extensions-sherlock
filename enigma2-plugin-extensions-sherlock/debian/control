@@ -1,12 +1,17 @@
+Source: enigma2-plugin-extensions-sherlock
+Section: unknown
+Priority: optional
+Maintainer: Haxe18 <Haxe18>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock
+Vcs-Git: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock.git
+Vcs-Browser: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock.git
+
 Package: enigma2-plugin-extensions-sherlock
-Version: 7.50
 Description: Sherlock
 Section: extra
 Priority: optional
-Maintainer: Haxe18
 Architecture: all
-OE: enigma2
-PackageArch: all
 Homepage: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock
 Depends: enigma2, enigma2-plugin-extensions-bitrateviewer
-Source: Vali,dhwz
