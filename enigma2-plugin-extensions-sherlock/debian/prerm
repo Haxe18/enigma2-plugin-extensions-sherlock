@@ -1,1 +1,2 @@
+#!/bin/sh
 rm /usr/lib/enigma2/python/Plugins/Extensions/Sherlock/*.pyo
