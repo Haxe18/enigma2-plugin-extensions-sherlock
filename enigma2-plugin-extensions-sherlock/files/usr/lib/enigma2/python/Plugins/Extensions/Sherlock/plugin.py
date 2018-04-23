@@ -1,4 +1,4 @@
-,# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #
 #    Sherlock for Dreambox-Enigma2
 #    Version: 7.0
