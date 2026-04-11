@@ -390,9 +390,10 @@ class SherlockII(Screen):
 		if info is not None:
 			xresol = info.getInfo(iServiceInformation.sVideoWidth)
 			yresol = info.getInfo(iServiceInformation.sVideoHeight)
-			feinfo = (service and service.frontendInfo())
-			if (feinfo is not None) and (xresol>0):
+			if xresol > 0:
 				srv_Text = "Size: " + str(xresol) + "x" + str(yresol) + "\n"
+			feinfo = (service and service.frontendInfo())
+			if feinfo is not None:
 				frontendData = (feinfo and feinfo.getAll(True))
 				if (frontendData is not None):
 					if (frontendData.get("tuner_type") == "DVB-S"):
@@ -430,10 +431,10 @@ class SherlockII(Screen):
 			serviceInfo = service.info()
 			vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
 			apid = serviceInfo.getInfo(iServiceInformation.sAudioPID)
-		if vpid:
+		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback = self.getVideoBitrateData
-		if apid:
+		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback = self.getAudioBitrateData
 

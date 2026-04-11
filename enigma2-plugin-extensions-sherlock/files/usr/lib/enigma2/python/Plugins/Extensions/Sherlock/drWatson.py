@@ -106,10 +106,10 @@ class DoctorWatson(Screen):
 			serviceInfo = service.info()
 			vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
 			apid = serviceInfo.getInfo(iServiceInformation.sAudioPID)
-		if vpid:
+		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback.append(self.getVideoBitrateData)
-		if apid:
+		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback.append(self.getAudioBitrateData)
 		self.DWUpdateTimer.start(1000)
