@@ -109,6 +109,9 @@ class DoctorWatson(Screen):
 		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback.append(self.getVideoBitrateData)
+		elif hasattr(iServiceInformation, 'sTagBitrate') and serviceInfo.getInfo(iServiceInformation.sTagBitrate) > 0:
+			self.getVideoBitrateData(serviceInfo.getInfo(iServiceInformation.sTagBitrate) / 1000, True)
+
 		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback.append(self.getAudioBitrateData)

@@ -434,6 +434,11 @@ class SherlockII(Screen):
 		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback = self.getVideoBitrateData
+		elif hasattr(iServiceInformation, "sTagBitrate"):
+			bitrate = serviceInfo.getInfo(iServiceInformation.sTagBitrate)
+			if bitrate > 0:
+				self.getVideoBitrateData(bitrate / 1000, True)
+
 		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback = self.getAudioBitrateData
