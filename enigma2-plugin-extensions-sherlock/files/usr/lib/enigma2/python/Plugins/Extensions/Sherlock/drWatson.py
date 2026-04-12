@@ -74,6 +74,8 @@ class DoctorWatson(Screen):
 		self.onLayoutFinish.append(self.sartBitCalc)
 		self.DWUpdateTimer = eTimer()
 		self.DWUpdateTimer.callback.append(self.updateDWInfo)
+		self.TagBitrateTimer = eTimer()
+		self.TagBitrateTimer.callback.append(self.updateTagBitrates)
 
 	def Exit(self):
 		self.close()
@@ -109,13 +111,27 @@ class DoctorWatson(Screen):
 		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback.append(self.getVideoBitrateData)
-		elif hasattr(iServiceInformation, 'sTagBitrate') and serviceInfo.getInfo(iServiceInformation.sTagBitrate) > 0:
-			self.getVideoBitrateData(serviceInfo.getInfo(iServiceInformation.sTagBitrate) / 1000, True)
+		elif hasattr(iServiceInformation, 'sTagBitrate'):
+			bitrate = serviceInfo.getInfo(iServiceInformation.sTagBitrate)
+			if bitrate > 0:
+				self.getVideoBitrateData(bitrate / 1000, True)
+			self.TagBitrateTimer.start(1000)
 
 		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback.append(self.getAudioBitrateData)
 		self.DWUpdateTimer.start(1000)
+
+	def updateTagBitrates(self):
+		service = self.session.nav.getCurrentService()
+		if service:
+			serviceInfo = service.info()
+			if serviceInfo:
+				vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
+				if (not vpid or vpid <= 0) and hasattr(iServiceInformation, "sTagBitrate"):
+					bitrate = serviceInfo.getInfo(iServiceInformation.sTagBitrate)
+					if bitrate > 0:
+						self.getVideoBitrateData(bitrate / 1000, True)
 
 	def getVideoBitrateData(self, value, status):
 		if status:

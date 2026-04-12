@@ -374,10 +374,23 @@ class SherlockII(Screen):
 			"displayHelp": self.ExitSherlock
 		}, -1)
 		self.SysUpdateTimer = eTimer()
+		self.TagBitrateTimer = eTimer()
+		self.TagBitrateTimer.callback.append(self.updateTagBitrates)
 		self.onLayoutFinish.append(self.DataReader)
 
 	def ExitSherlock(self):
 		self.close()
+
+	def updateTagBitrates(self):
+		service = self.session.nav.getCurrentService()
+		if service:
+			serviceInfo = service.info()
+			if serviceInfo:
+				vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
+				if (not vpid or vpid <= 0) and hasattr(iServiceInformation, "sTagBitrate"):
+					bitrate = serviceInfo.getInfo(iServiceInformation.sTagBitrate)
+					if bitrate > 0:
+						self.getVideoBitrateData(bitrate / 1000, True)
 
 	def DataReader(self):
 		srv_Text = "N/A"
@@ -438,6 +451,7 @@ class SherlockII(Screen):
 			bitrate = serviceInfo.getInfo(iServiceInformation.sTagBitrate)
 			if bitrate > 0:
 				self.getVideoBitrateData(bitrate / 1000, True)
+			self.TagBitrateTimer.start(1000)
 
 		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
@@ -490,14 +504,15 @@ class SherlockII(Screen):
 			if info is not None:
 				if info.getInfo(iServiceInformation.sIsCrypted):
 					searchIDs =(info.getInfoObject(iServiceInformation.sCAIDs))
-					for oneID in searchIDs:
-						if res:
-							res = res + ", "
-						temp_str = hex(oneID).lstrip("0x")
-						if (len(temp_str)==4):
-							res = res + temp_str.upper()
-						else:
-							res = res + "0" + temp_str.upper()
+					if searchIDs:
+						for oneID in searchIDs:
+							if res:
+								res = res + ", "
+							temp_str = hex(oneID).lstrip("0x")
+							if (len(temp_str)==4):
+								res = res + temp_str.upper()
+							else:
+								res = res + "0" + temp_str.upper()
 					res = "max.Temp " + self.TempMessung() + "\ncaid " + res
 				else:
 					res = res + "\nmax.Temp " + self.TempMessung()
