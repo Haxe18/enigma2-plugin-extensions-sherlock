@@ -1,27 +1,29 @@
 # -*- coding: utf-8 -*-
 #
 #    Sherlock for Dreambox-Enigma2
-#    Version: 7.0
+#    Version: 7.60
 #    Coded by Vali (c)2009-2011
+#    Support by Haxe18 (c)2018-
 #
-#    This plugin is licensed under the Creative Commons 
-#    Attribution-NonCommercial-ShareAlike 3.0 Unported License. 
-#    To view a copy of this license, 
-#    visit http://creativecommons.org/licenses/by-nc-sa/3.0/ 
-#    or send a letter to 
+#    This plugin is licensed under the Creative Commons
+#    Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+#    To view a copy of this license,
+#    visit http://creativecommons.org/licenses/by-nc-sa/3.0/
+#    or send a letter to
 #    Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
 #
 #    Alternatively, this plugin may be distributed and executed on hardware which
 #    is licensed by Dream Multimedia GmbH.
 #
 #    This plugin is NOT free software. It is open source, you are allowed to
-#    modify it (if you keep the license), but it may not be commercially 
+#    modify it (if you keep the license), but it may not be commercially
 #    distributed other than under the conditions noted above.
 #
 #######################################################################
 
 
 
+import time
 from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.PluginBrowser import PluginBrowser
@@ -234,9 +236,10 @@ class SherlockII(Screen):
 			</widget>
 			<widget backgroundColor="#141415" font="Regular;16" foregroundColor="#f0f0f0" name="daten" position="720,95" size="300,306" transparent="1" zPosition="11"/>
 			<widget backgroundColor="#141415" font="Regular;18" foregroundColor="#f0f0f0" halign="left" name="dccamdName" noWrap="1" position="720,40" size="300,25" transparent="1" zPosition="3"/>
-			<widget render="Label" source="video_bitrate" backgroundColor="#141415" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="430,460" size="230,20" transparent="1" zPosition="3"/>
-			<widget render="Label" source="audio_bitrate" backgroundColor="#141415" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="430,482" size="230,20" transparent="1" zPosition="3"/>
+			<widget name="video_bitrate" backgroundColor="#141415" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="430,460" size="230,20" transparent="1" zPosition="3"/>
+			<widget name="audio_bitrate" backgroundColor="#141415" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="430,482" size="230,20" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#141415" font="Regular;18" foregroundColor="#f0f0f0" halign="left" name="signal_info" position="50,460" size="317,50" transparent="1" zPosition="3"/>
+
 			<widget backgroundColor="#141415" font="Regular;18" foregroundColor="#f0f0f0" halign="left" name="system_info" position="715,405" size="290,147" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#141415" font="Regular;16" foregroundColor="#f0f0f0" halign="left" name="dataFileName" noWrap="1" position="720,70" size="300,22" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#141415" font="Regular;16" foregroundColor="#f0f0f0" halign="left" name="OrbitalPosition" noWrap="1" position="50,435" size="77,22" transparent="1" zPosition="4"/>
@@ -290,9 +293,10 @@ class SherlockII(Screen):
 			<widget backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" name="daten" noWrap="1" position="970,180" size="400,386" transparent="1" zPosition="9"/>
 			<widget backgroundColor="#00111112" font="Regular;18" foregroundColor="#f0f0f0" halign="left" name="system_info" position="900,545" size="350,180" transparent="1" zPosition="9"/>
 			<widget backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" name="dccamdName" noWrap="1" position="970,100" size="300,25" transparent="1" zPosition="3"/>
-			<widget render="Label" source="video_bitrate" backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" position="560,610" size="230,20" transparent="1" zPosition="3"/>
-			<widget render="Label" source="audio_bitrate" backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" position="560,632" size="230,20" transparent="1" zPosition="3"/>
+			<widget name="video_bitrate" backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" position="560,610" size="230,20" transparent="1" zPosition="3"/>
+			<widget name="audio_bitrate" backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" position="560,632" size="230,20" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" name="signal_info" position="70,605" size="461,50" transparent="1" zPosition="3"/>
+
 			<widget backgroundColor="#00111112" font="Regular;16" foregroundColor="#00f0f0f0" halign="left" name="dataFileName" noWrap="1" position="970,140" size="300,22" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#00111112" font="Regular;18" foregroundColor="#00f0f0f0" halign="left" name="OrbitalPosition" noWrap="1" position="70,580" size="97,22" transparent="1" zPosition="4"/>
 		</screen>"""
@@ -343,9 +347,10 @@ class SherlockII(Screen):
 			</widget>
 			<widget backgroundColor="#080808" font="Regular;14" foregroundColor="#f0f0f0" name="daten" position="54,362" size="380,166" transparent="1" zPosition="9"/>
 			<widget backgroundColor="#080808" font="Regular;14" foregroundColor="#f0f0f0" halign="left" name="system_info" position="440,362" size="280,166" transparent="1" zPosition="9"/>
-			<widget render="Label" source="video_bitrate" backgroundColor="#080808" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="440,269" size="280,20" transparent="1" zPosition="3"/>
-			<widget render="Label" source="audio_bitrate" backgroundColor="#080808" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="440,291" size="280,20" transparent="1" zPosition="3"/>
+			<widget name="video_bitrate" backgroundColor="#080808" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="440,269" size="280,20" transparent="1" zPosition="3"/>
+			<widget name="audio_bitrate" backgroundColor="#080808" font="Regular;17" foregroundColor="#f0f0f0" halign="left" position="440,291" size="280,20" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#080808" font="Regular;18" foregroundColor="#f0f0f0" halign="left" name="signal_info" position="440,174" size="280,50" transparent="1" zPosition="3"/>
+
 			<widget backgroundColor="#080808" font="Regular;16" foregroundColor="#f0f0f0" halign="left" name="dataFileName" noWrap="1" position="440,329" size="230,22" transparent="1" zPosition="3"/>
 			<widget backgroundColor="#080808" font="Regular;16" foregroundColor="#f0f0f0" halign="right" name="OrbitalPosition" noWrap="1" position="580,174" size="86,22" transparent="1" zPosition="4"/>
 		</screen>"""
@@ -357,12 +362,14 @@ class SherlockII(Screen):
 		self.InfoActive = False
 		self.videoBitrate = None
 		self.audioBitrate = None
+		self.last_net_bytes = 0
+		self.last_net_time = 0
 		self["daten"] = Label(_(" "))
 		self["system_info"] = Label(_(" "))
 		self["signal_info"] = Label(_(" "))
 		self["dccamdName"] = Label(_(" "))
-		self["video_bitrate"] = StaticText()
-		self["audio_bitrate"] = StaticText()
+		self["video_bitrate"] = Label(_(" "))
+		self["audio_bitrate"] = Label(_(" "))
 		self["dataFileName"] = Label(_(" "))
 		self["OrbitalPosition"] = Label(_(" "))
 		self["actions"] = ActionMap(["OkCancelActions", "DirectionActions", "HelpActions"],
@@ -374,10 +381,90 @@ class SherlockII(Screen):
 			"displayHelp": self.ExitSherlock
 		}, -1)
 		self.SysUpdateTimer = eTimer()
+		self.SysUpdateTimer_conn = self.SysUpdateTimer.timeout.connect(self.updateSysInfo)
+		self.TagBitrateTimer = eTimer()
+		self.TagBitrateTimer_conn = self.TagBitrateTimer.timeout.connect(self.updateTagBitrates)
 		self.onLayoutFinish.append(self.DataReader)
+		self.onLayoutFinish.append(self.updateTagBitrates)
 
 	def ExitSherlock(self):
 		self.close()
+
+	def getNetworkBytes(self):
+		try:
+			# Target primary ethernet (ignoring lo and VPNs like tun0)
+			with open('/proc/net/dev', 'r') as f:
+				lines = f.readlines()
+				for line in lines[2:]:
+					parts = line.split(':')
+					if len(parts) == 2:
+						iface = parts[0].strip()
+						if iface == "eth0":
+							data = parts[1].split()
+							if len(data) > 0:
+								return int(data[0])
+		except:
+			pass
+		return 0
+
+	def updateTagBitrates(self):
+		service = self.session.nav.getCurrentService()
+		info = service and service.info()
+		if info:
+			vbr = -1
+			# Priority: Live Network throughput (for IPTV), then System Tags (for DVB/VOD)
+			for attr in ["sTransferBitrate", "sTagBitrate", "sVideoBitrate"]:
+				if hasattr(iServiceInformation, attr):
+					try:
+						val = info.getInfo(getattr(iServiceInformation, attr))
+						if val > 0:
+							vbr = val
+							break
+					except:
+						pass
+
+			abr = -1
+			for attr in ["sAudioBitrate", "sTagAudioBitrate"]:
+				if hasattr(iServiceInformation, attr):
+					try:
+						val = info.getInfo(getattr(iServiceInformation, attr))
+						if val > 0:
+							abr = val
+							break
+					except:
+						pass
+
+			# Network Measurement (Fallback for IPTV/TVHeadend)
+			current_time = time.time()
+			current_bytes = self.getNetworkBytes()
+
+			net_kbits = 0
+			if self.last_net_bytes > 0 and current_bytes > self.last_net_bytes and self.last_net_time > 0:
+				time_diff = current_time - self.last_net_time
+				if time_diff > 0:
+					byte_diff = current_bytes - self.last_net_bytes
+					net_kbits = int((byte_diff * 8) / (1000 * time_diff))
+
+			self.last_net_bytes = current_bytes
+			self.last_net_time = current_time
+
+			# Update UI
+			vpid = info.getInfo(iServiceInformation.sVideoPID)
+			ref = self.session.nav.getCurrentlyPlayingServiceReference()
+			ref_str = ref and ref.toString().lower() or ""
+			is_iptv = "%3a//" in ref_str or "://" in ref_str
+
+			if vpid <= 0 and (net_kbits > 0 or is_iptv):
+				if net_kbits > 0:
+					self["video_bitrate"].setText("Net: %d kbit/s" % net_kbits)
+				self["audio_bitrate"].setText(" ")
+			else:
+				if vbr > 0:
+					self["video_bitrate"].setText("Video: %d kbit/s" % (vbr / 1000))
+				if abr > 0:
+					self["audio_bitrate"].setText("Audio: %d kbit/s" % (abr / 1000))
+
+		self.TagBitrateTimer.start(1000)
 
 	def DataReader(self):
 		srv_Text = "N/A"
@@ -390,9 +477,10 @@ class SherlockII(Screen):
 		if info is not None:
 			xresol = info.getInfo(iServiceInformation.sVideoWidth)
 			yresol = info.getInfo(iServiceInformation.sVideoHeight)
-			feinfo = (service and service.frontendInfo())
-			if (feinfo is not None) and (xresol>0):
+			if xresol > 0:
 				srv_Text = "Size: " + str(xresol) + "x" + str(yresol) + "\n"
+			feinfo = (service and service.frontendInfo())
+			if feinfo is not None:
 				frontendData = (feinfo and feinfo.getAll(True))
 				if (frontendData is not None):
 					if (frontendData.get("tuner_type") == "DVB-S"):
@@ -425,28 +513,29 @@ class SherlockII(Screen):
 		if not ref:
 			return
 		vpid = apid = dvbnamespace = -1
-		service = self.session.nav.getCurrentService()
 		if service:
 			serviceInfo = service.info()
 			vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
 			apid = serviceInfo.getInfo(iServiceInformation.sAudioPID)
-		if vpid:
+
+		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
 			self.videoBitrate.callback = self.getVideoBitrateData
-		if apid:
+
+		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
 			self.audioBitrate.callback = self.getAudioBitrateData
 
 	def getVideoBitrateData(self,value, status):
 		if status:
-			self["video_bitrate"].text = "Video: %d kbit/s" % value;
+			self["video_bitrate"].setText("Video: %d kbit/s" % value);
 		else:
 			self.videoBitrate = None
 
 	def getAudioBitrateData(self,value, status):
-		if status:
-			self["audio_bitrate"].text = "Audio: %d kbit/s" % value;
-		else:
+		if status and value > 0:
+			self["audio_bitrate"].setText("Audio: %d kbit/s" % value);
+		elif not status:
 			self.audioBitrate = None
 
 	def is_dccamd_running(self):
@@ -464,42 +553,53 @@ class SherlockII(Screen):
 			return "N/A"
 
 	def updateSysInfo(self):
+		ret = ""
 		try:
 			out_line = open("/proc/loadavg").readline()
-			ret = "load average   " + out_line[:15] + "\n"# + "\n"
-			out_lines = []
+			ret = "load average   " + out_line[:15] + "\n"
 			out_lines = open("/proc/meminfo").readlines()
-			for lidx in range(len(out_lines)-1):
+			for lidx in range(len(out_lines)):
 				tstLine = out_lines[lidx].split()
 				if "MemFree:" in tstLine:
 					ret = ret + out_lines[lidx]
 			out_lines = popen("df -h").readlines()
-			out_line = out_lines[1]
-			if len(out_line.split()) > 4:
-				out_line = "FreeFlash: "+out_line.split()[3]+"B   used: "+out_line.split()[4]+"\n"
-				ret = ret + out_line
-			res = ""
-			service = self.session.nav.getCurrentService()
-			info = service and service.info()
-			if info is not None:
-				if info.getInfo(iServiceInformation.sIsCrypted):
-					searchIDs =(info.getInfoObject(iServiceInformation.sCAIDs))
-					for oneID in searchIDs:
-						if res:
-							res = res + ", "
-						temp_str = hex(oneID).lstrip("0x")
-						if (len(temp_str)==4):
-							res = res + temp_str.upper()
-						else:
-							res = res + "0" + temp_str.upper()
-					res = "max.Temp " + self.TempMessung() + "\ncaid " + res
-				else:
-					res = res + "\nmax.Temp " + self.TempMessung()
-			ret = ret + res
+			if len(out_lines) > 1:
+				out_line = out_lines[1]
+				if len(out_line.split()) > 4:
+					out_line = "FreeFlash: " + out_line.split()[3] + "B   used: " + out_line.split()[4] + "\n"
+					ret = ret + out_line
 		except:
+			pass
+
+		# Always get temperature (independent of service info)
+		res = "\nmax.Temp " + self.TempMessung()
+
+		# Try to get CAID info (might fail on IPTV)
+		service = self.session.nav.getCurrentService()
+		info = service and service.info()
+		try:
+			if info and info.getInfo(iServiceInformation.sIsCrypted):
+				searchIDs = info.getInfoObject(iServiceInformation.sCAIDs)
+				if searchIDs:
+					caid_list = ""
+					for oneID in searchIDs:
+						if caid_list:
+							caid_list = caid_list + ", "
+						temp_str = hex(oneID).lstrip("0x")
+						if (len(temp_str) == 4):
+							caid_list = caid_list + temp_str.upper()
+						else:
+							caid_list = caid_list + "0" + temp_str.upper()
+					res = res + "\ncaid " + caid_list
+		except:
+			pass
+
+		if not ret:
 			ret = "N/A"
-		self["system_info"].setText(_(ret))
+		self["system_info"].setText(_(ret + res))
+
 		if len(self.InfoFiles) > 0:
+
 			try:
 				f = open(self.InfoFiles[self.IFindex], "r")
 				data_lines=f.readlines()
@@ -511,6 +611,7 @@ class SherlockII(Screen):
 				Data_Text="No data-file found."
 			self["daten"].setText(_(Data_Text))
 			self["dataFileName"].setText(self.InfoFiles[self.IFindex])
+		self.SysUpdateTimer.start(5000)
 
 	def searchInfoFiles(self):
 		files = listdir('/tmp/')
@@ -535,6 +636,8 @@ class SherlockII(Screen):
 	def TempMessung(self):
 		maxtemp = 0
 		sensotN = "No suitable sensor available ?"
+
+		# Use Enigma2 Sensors component
 		try:
 			templist = sensors.getSensorsList(sensors.TYPE_TEMPERATURE)
 			tempcount = len(templist)
@@ -545,11 +648,26 @@ class SherlockII(Screen):
 					maxtemp = tt
 					sensotN = sensors.getSensorName(id)
 					if sensotN == "undefined":
-						sensotN = "sensor-"+str(id)
+						sensotN = "sensor-" + str(id)
 		except:
 			pass
-		return str(maxtemp) + "°C / " + sensotN
 
+		res = ""
+		if maxtemp > 0:
+			res = str(maxtemp) + "°C / " + sensotN
 
+		# Always try to get HDD temperature
+		try:
+			out = popen("hddtemp -n /dev/sda 2>/dev/null").read().strip()
+			if out and out.isdigit():
+				hdd_temp = str(out) + "°C / HDD"
+				if res:
+					res = res + " | " + hdd_temp
+				else:
+					res = hdd_temp
+		except:
+			pass
 
-
+		if res:
+			return res
+		return sensotN

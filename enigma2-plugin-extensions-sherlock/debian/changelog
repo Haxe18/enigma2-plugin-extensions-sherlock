@@ -1,3 +1,14 @@
+enigma2-plugin-extensions-sherlock (7.60) unstable; urgency=medium
+
+  * Fix OE2.5 (DreamOS) compatibility for eTimer and callbacks.
+  * Implement live network bitrate measurement for IPTV/TVHeadend streams.
+  * Suppress temporary audio/video bitrate artifacts for IPTV streams.
+  * Add HDD temperature display (requires hddtemp).
+  * Switch bitrate widgets to Label for better UI stability.
+  * Add hddtemp as recommended dependency.
+
+ -- Haxe18 <Haxe18>  Sat, 25 Apr 2026 21:05:17 +0200
+
 enigma2-plugin-extensions-sherlock (7.50) unstable; urgency=medium
 
   * Initial Release.

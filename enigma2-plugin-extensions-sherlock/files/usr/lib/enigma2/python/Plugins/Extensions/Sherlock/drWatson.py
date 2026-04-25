@@ -2,19 +2,20 @@
 #
 #    Doctor Watson for Dreambox-Enigma2
 #    Coded by Vali (c)2010
+#    Support by Haxe18 (c)2018-
 #
-#    This plugin is licensed under the Creative Commons 
-#    Attribution-NonCommercial-ShareAlike 3.0 Unported License. 
-#    To view a copy of this license, 
-#    visit http://creativecommons.org/licenses/by-nc-sa/3.0/ 
-#    or send a letter to 
+#    This plugin is licensed under the Creative Commons
+#    Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+#    To view a copy of this license,
+#    visit http://creativecommons.org/licenses/by-nc-sa/3.0/
+#    or send a letter to
 #    Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
 #
 #    Alternatively, this plugin may be distributed and executed on hardware which
 #    is licensed by Dream Multimedia GmbH.
 #
 #    This plugin is NOT free software. It is open source, you are allowed to
-#    modify it (if you keep the license), but it may not be commercially 
+#    modify it (if you keep the license), but it may not be commercially
 #    distributed other than under the conditions noted above.
 #
 #######################################################################
@@ -73,7 +74,7 @@ class DoctorWatson(Screen):
 		self.abrint = 0
 		self.onLayoutFinish.append(self.sartBitCalc)
 		self.DWUpdateTimer = eTimer()
-		self.DWUpdateTimer.callback.append(self.updateDWInfo)
+		self.DWUpdateTimer_conn = self.DWUpdateTimer.timeout.connect(self.updateDWInfo)
 
 	def Exit(self):
 		self.close()
@@ -106,12 +107,15 @@ class DoctorWatson(Screen):
 			serviceInfo = service.info()
 			vpid = serviceInfo.getInfo(iServiceInformation.sVideoPID)
 			apid = serviceInfo.getInfo(iServiceInformation.sAudioPID)
-		if vpid:
+		if vpid and vpid > 0:
 			self.videoBitrate = eBitrateCalculator(vpid, ref.toString(), 1000, 1024*1024)
-			self.videoBitrate.callback.append(self.getVideoBitrateData)
-		if apid:
+			self.videoBitrate.callback = self.getVideoBitrateData
+		elif hasattr(iServiceInformation, 'sTagBitrate') and serviceInfo.getInfo(iServiceInformation.sTagBitrate) > 0:
+			self.getVideoBitrateData(serviceInfo.getInfo(iServiceInformation.sTagBitrate) / 1000, True)
+
+		if apid and apid > 0:
 			self.audioBitrate = eBitrateCalculator(apid, ref.toString(), 1000, 64*1024)
-			self.audioBitrate.callback.append(self.getAudioBitrateData)
+			self.audioBitrate.callback = self.getAudioBitrateData
 		self.DWUpdateTimer.start(1000)
 
 	def getVideoBitrateData(self, value, status):
@@ -234,6 +238,7 @@ class DoctorWatson(Screen):
 				else:
 					xavg = x
 				self["lavg"].setText("%3.02f" % xavg)
+		self.DWUpdateTimer.start(1000)
 
 	def up(self):
 		if self.watch4 > 1:

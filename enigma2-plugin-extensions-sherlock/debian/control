@@ -15,3 +15,4 @@ Priority: optional
 Architecture: all
 Homepage: https://github.com/Haxe18/enigma2-plugin-extensions-sherlock
 Depends: enigma2, enigma2-plugin-extensions-bitrateviewer
+Recommends: hddtemp
