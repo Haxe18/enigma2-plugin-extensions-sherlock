@@ -1,0 +1,60 @@
+name: Build & Release .deb
+
+on:
+  push:
+    tags:
+      - "v*"          # triggered by: git tag v7.62 && git push origin v7.62
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # ── 2. Install build dependencies ──────────────────────────────────────
+      - name: Install debhelper
+        run: sudo apt-get update && sudo apt-get install -y debhelper build-essential
+
+      # ── 3. Extract version from debian/changelog ────────────────────────────
+      - name: Extract package version
+        id: pkg_version
+        run: |
+          VERSION=$(dpkg-parsechangelog \
+            --file enigma2-plugin-extensions-sherlock/debian/changelog \
+            --show-field Version)
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "deb_name=enigma2-plugin-extensions-sherlock_${VERSION}_all.deb" >> "$GITHUB_OUTPUT"
+
+      # ── 4. Build the .deb ──────────────────────────────────────────────────
+      - name: Build Debian package
+        run: |
+          cd enigma2-plugin-extensions-sherlock
+          dpkg-buildpackage -b -us -uc
+
+      # ── 5. Collect changelog body for the release notes ────────────────────
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          BODY=$(dpkg-parsechangelog \
+            --file enigma2-plugin-extensions-sherlock/debian/changelog \
+            --show-field Changes)
+          # GitHub output: encode newlines
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "${BODY}"   >> "$GITHUB_OUTPUT"
+          echo "EOF"        >> "$GITHUB_OUTPUT"
+
+      # ── 6. Create GitHub Release and upload .deb ───────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name:   ${{ github.ref_name }}
+          name:       "Sherlock ${{ steps.pkg_version.outputs.version }}"
+          body:       ${{ steps.changelog.outputs.body }}
+          files:      ${{ steps.pkg_version.outputs.deb_name }}
+          draft:      false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
