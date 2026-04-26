@@ -1,3 +1,13 @@
+enigma2-plugin-extensions-sherlock (7.61) unstable; urgency=medium
+
+  * system_info: MemFree replaced by RAM used/total with dynamic MB/KB unit.
+  * system_info: Flash shows used/total/percent via shared fmt_usage() helper.
+  * system_info: CPU temperature label simplified to "CPU" (sensor name removed).
+  * system_info: Unified per-label spacing for proportional font alignment.
+  * system_info: Block shifted down by one line for better visual separation.
+
+ -- Haxe18 <Haxe18>  Sun, 26 Apr 2026 20:53:00 +0200
+
 enigma2-plugin-extensions-sherlock (7.60) unstable; urgency=medium
 
   * Fix OE2.5 (DreamOS) compatibility for eTimer and callbacks.

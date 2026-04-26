@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #    Sherlock for Dreambox-Enigma2
-#    Version: 7.60
+#    Version: 7.61
 #    Coded by Vali (c)2009-2011
 #    Support by Haxe18 (c)2018-
 #
@@ -553,28 +553,105 @@ class SherlockII(Screen):
 			return "N/A"
 
 	def updateSysInfo(self):
+		# Per-label padding – hand-tuned for Regular (proportional) font.
+		# Each label gets exactly enough spaces to visually align the values.
+		LBLS = {
+			"Load:": "   ",   # 5 + 3 sp
+			"Mem:": "    ",   # 4 + 4 sp
+			"Flash:": "   ",  # 6 + 3 sp  ("Fl" is narrow → same visual width as "Load:")
+			"Temp:": "   ",   # 5 + 3 sp
+			"CAID:": "   ",   # 5 + 3 sp
+		}
 		ret = ""
 		try:
+			# fmt_usage: identical output format for RAM and Flash
+			def fmt_usage(used, total, pct):
+				"""Format a used/total/percentage tuple into a display string.
+
+				Args:
+					used (str): Human-readable used value, e.g. ``"292 MB"``.
+					total (str): Human-readable total value, e.g. ``"1257 MB"``.
+					pct (str): Percentage string including symbol, e.g. ``"23%"``.
+
+				Returns:
+					str: Formatted string, e.g. ``"292 MB / 1257 MB (23% used)"``.
+				"""
+				return "%s / %s (%s used)" % (used, total, pct)
+
+			# kb_fmt: convert kB integer → "977 MB" / "512 KB"
+			def kb_fmt(kb):
+				"""Convert a kilobyte integer to a human-readable size string.
+
+				Args:
+					kb (int): Size in kilobytes.
+
+				Returns:
+					str: ``"<value> MB"`` when *kb* >= 1024, otherwise ``"<value> KB"``.
+				"""
+				if kb >= 1024:
+					return "%.0f MB" % (kb / 1024.0)
+				return "%d KB" % kb
+
+			# df_fmt: "627M" → "627 MB", "1.2G" → "1.2 GB"  (space before unit)
+			def df_fmt(val):
+				"""Insert a space between the numeric part and the unit suffix from ``df -h``.
+
+				``df -h`` returns values like ``"627M"`` or ``"1.2G"``.  This function
+				converts them to ``"627 MB"`` / ``"1.2 GB"`` so the format matches
+				:func:`kb_fmt` output.
+
+				Args:
+					val (str): Raw ``df -h`` size token, e.g. ``"627M"``.
+
+				Returns:
+					str: Spaced and suffixed string, e.g. ``"627 MB"``.
+						 Returns *val* unchanged if it cannot be parsed.
+				"""
+				if val and len(val) > 1 and val[-1].isalpha():
+					return val[:-1] + " " + val[-1] + "B"
+				return val
+
+			# Load average (1 / 5 / 15 min)
 			out_line = open("/proc/loadavg").readline()
-			ret = "load average   " + out_line[:15] + "\n"
-			out_lines = open("/proc/meminfo").readlines()
-			for lidx in range(len(out_lines)):
-				tstLine = out_lines[lidx].split()
-				if "MemFree:" in tstLine:
-					ret = ret + out_lines[lidx]
+			load_vals = out_line.strip().split()[:3]
+			ret = "\n" + "Load:" + LBLS["Load:"] + "  ".join(load_vals) + "\n"
+
+			# RAM: used / total (XX% used)
+			mem_free_kb = 0
+			mem_total_kb = 0
+			for line in open("/proc/meminfo").readlines():
+				parts = line.split()
+				if not parts:
+					continue
+				if parts[0] == "MemFree:":
+					try:
+						mem_free_kb = int(parts[1])
+					except (IndexError, ValueError):
+						pass
+				elif parts[0] == "MemTotal:":
+					try:
+						mem_total_kb = int(parts[1])
+					except (IndexError, ValueError):
+						pass
+
+			if mem_total_kb > 0:
+				mem_used_kb = mem_total_kb - mem_free_kb
+				mem_pct = "%d%%" % int(mem_used_kb * 100 / mem_total_kb)
+				ret += "Mem:" + LBLS["Mem:"] + fmt_usage(kb_fmt(mem_used_kb), kb_fmt(mem_total_kb), mem_pct) + "\n"
+
+			# Flash: used / total (XX% used) – same fmt_usage, df_fmt ensures "627 MB" spacing
 			out_lines = popen("df -h").readlines()
 			if len(out_lines) > 1:
-				out_line = out_lines[1]
-				if len(out_line.split()) > 4:
-					out_line = "FreeFlash: " + out_line.split()[3] + "B   used: " + out_line.split()[4] + "\n"
-					ret = ret + out_line
+				df_parts = out_lines[1].split()
+				if len(df_parts) > 4:
+					ret += "Flash:" + LBLS["Flash:"] + fmt_usage(df_fmt(df_parts[2]), df_fmt(df_parts[1]), df_parts[4]) + "\n"
 		except:
 			pass
 
-		# Always get temperature (independent of service info)
-		res = "\nmax.Temp " + self.TempMessung()
+		# Temperature (no leading \n – ret already ends with \n)
+		res = "Temp:" + LBLS["Temp:"] + self.TempMessung()
 
-		# Try to get CAID info (might fail on IPTV)
+		# CAID info (only for encrypted services)
 		service = self.session.nav.getCurrentService()
 		info = service and service.info()
 		try:
@@ -584,13 +661,13 @@ class SherlockII(Screen):
 					caid_list = ""
 					for oneID in searchIDs:
 						if caid_list:
-							caid_list = caid_list + ", "
+							caid_list += ", "
 						temp_str = hex(oneID).lstrip("0x")
-						if (len(temp_str) == 4):
-							caid_list = caid_list + temp_str.upper()
+						if len(temp_str) == 4:
+							caid_list += temp_str.upper()
 						else:
-							caid_list = caid_list + "0" + temp_str.upper()
-					res = res + "\ncaid " + caid_list
+							caid_list += "0" + temp_str.upper()
+					res += "\n" + ("CAID:").ljust(LBL_W) + caid_list
 		except:
 			pass
 
@@ -654,7 +731,7 @@ class SherlockII(Screen):
 
 		res = ""
 		if maxtemp > 0:
-			res = str(maxtemp) + "°C / " + sensotN
+			res = str(maxtemp) + "°C / CPU"
 
 		# Always try to get HDD temperature
 		try:
